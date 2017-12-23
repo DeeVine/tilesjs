@@ -1,8 +1,10 @@
 // **Tile Game**
 
 //Game mechanics
+// need to be able to randomize position rather than simply clicking left to right (need to compare values of clicked item)
+// 
 // function to assign correct tiles
-  //function should only change each array element once
+// function should only change each array element once
 // function to create tiles
 // need to create additional tiles each level
 // function that checks if tile clicked is correct
@@ -15,8 +17,18 @@ var userArray =[];
 var rand = Math.random();
 console.log(rand);
 
-function generator () {
-  console.log("working");  
+function resetGame () {
+  document.querySelector('.main').innerHTML= '';
+  gameArray = [0, 1, 2, 3, 4];
+  gameArray = shuffle(gameArray); //randomize array indexes
+  userArray = [];
+}
+
+function startGame () {
+  document.querySelector('.main').innerHTML= '';
+  console.log("working"); 
+  gameArray = shuffle(gameArray); //randomize array indexes
+  userArray = []; 
   
   for (i = 0; i < gameArray.length; i++) {
     var btn = document.createElement("button");        // Create a <button> element
@@ -29,8 +41,6 @@ function generator () {
     btn.onclick=function(e) {
       var data = e.target.getAttribute('data')
       data = parseInt(data);
-      console.log(typeof(data));
-      //call check click function
       checkClick(data);
     } 
     // Append the text to <button>
@@ -40,19 +50,20 @@ function generator () {
 
 //check if clicked button is correct
 function checkClick (data) {
-
   userArray.push(data);
-
-  for (var i = 0; i < userArray.length; i++) {
-    if(userArray[i] === gameArray[i]) {
-      console.log('correct');
-      // gameArray.push(1);
-      // gameArray = shuffle(gameArray); //randomize array indexes
-      // document.querySelector('.main').innerHTML= '';
-      // generator();
-    } else {
-      console.log('wrong');
+  if (userArray[userArray.length-1] === gameArray[userArray.length-1]) {
+    console.log("correct!");
+    console.log(userArray[userArray.length-1])
+    //check if win condition met
+    if(userArray.length === gameArray.length) {
+      console.log("you win!")
+      gameArray.push(gameArray.length);
+      startGame();
     }
+  } else {
+    console.log("you lose!");
+    resetGame();
+    startGame();
   }
 }
 
@@ -78,4 +89,4 @@ function shuffle(array) {
 arr = shuffle(gameArray);
 console.log(arr);
 
-generator();
+startGame();
